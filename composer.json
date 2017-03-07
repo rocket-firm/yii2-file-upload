@@ -1,0 +1,19 @@
+{
+    "name": "rocketfirm/yii2-file-upload",
+    "description": "File uploading in Yii2 has never been easier! Edit",
+    "type": "library",
+    "require": {
+        "yiisoft/yii2": "^2.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "naffiq",
+            "email": "abdu.galymzhan@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
