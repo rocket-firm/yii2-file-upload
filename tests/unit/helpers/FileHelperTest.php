@@ -18,7 +18,7 @@ class FileHelperTest extends Unit
     public function _before()
     {
         FileHelper::$storageDir = 'tests';
-        \Yii::setAlias('@tests', dirname(__DIR__, 2));
+        \Yii::setAlias('@tests', dirname(__DIR__) . '/../');
 
         /**
          * Мокаем класс Security чтобы выдавал постоянныое имя при гереации случайно строки
