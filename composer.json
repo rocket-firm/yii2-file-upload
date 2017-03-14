@@ -21,5 +21,13 @@
         "email": "johnluxor@hotmail.com"
         }
     ],
-    "minimum-stability": "stable"
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "rocketfirm\\fileupload\\": "src",
+      "rocketfirm\\fileupload\\assets\\": "src\\assets",
+      "rocketfirm\\fileupload\\helpers\\": "src\\helpers",
+      "rocketfirm\\fileupload\\widgets\\": "src\\widgets"
+    }
+  }
 }
