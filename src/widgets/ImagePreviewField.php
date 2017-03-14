@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: naffiq
- * Date: 3/7/17
- * Time: 2:03 PM
- */
-
 namespace rocketfirm\fileupload\widgets;
-
 
 use rocketfirm\fileupload\assets\ImagePreviewAsset;
 use rocketfirm\fileupload\UploadableInterface;

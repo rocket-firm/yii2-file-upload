@@ -1,25 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: naffiq
- * Date: 2/22/17
- * Time: 12:18 PM
- */
-
 namespace rocketfirm\fileupload;
 
 use yii\web\UploadedFile;
 
 /**
  * Interface UploadableInterface
- * @package app\components\interfaces
+ * @package rocketfirm\fileupload
  */
 interface UploadableInterface
 {
     /**
      * @param UploadedFile $file
-     * @param $attribute
+     * @param string $attribute
      * @param bool $removeOld
+     *
      * @return mixed
      */
     public function saveFile(UploadedFile $file, $attribute, $removeOld = true);
@@ -27,20 +21,23 @@ interface UploadableInterface
     /**
      * @param $attribute
      * @param bool $abs
-     * @param null $mode
+     * @param string|null $suffix
+     *
      * @return mixed
      */
-    public function getFilePath($attribute, $abs = false, $mode = null);
+    public function getFilePath($attribute, $abs = false, $suffix = null);
 
     /**
-     * @param $attribute
-     * @param null $mode
+     * @param string $attribute
+     * @param string|null $suffix
+     *
      * @return mixed
      */
-    public function deleteFile($attribute, $mode = null);
+    public function deleteFile($attribute, $suffix = null);
 
     /**
      * @param bool $abs
+     *
      * @return mixed
      */
     public function getStorageDir($abs = false);

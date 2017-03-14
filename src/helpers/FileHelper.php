@@ -3,7 +3,6 @@ namespace rocketfirm\fileupload\helpers;
 
 use yii\base\Exception;
 use yii\helpers\BaseFileHelper;
-use yii\helpers\StringHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -17,6 +16,15 @@ class FileHelper extends BaseFileHelper
 {
     public static $storageDir = 'media';
 
+    /**
+     * Download file from url or path and save it to $path
+     *
+     * @param string $url
+     * @param string $path
+     * @param int $tryCount
+     *
+     * @return bool
+     */
     public static function download($url, $path, $tryCount = 1)
     {
         $content = @file_get_contents($url);
@@ -25,33 +33,49 @@ class FileHelper extends BaseFileHelper
             if ($tryCount) {
                 return self::download($url, $path, $tryCount);
             }
+
             return false;
         }
         file_put_contents($path, $content);
+
         return true;
     }
 
+    /**
+     * @param $ext
+     * @param null $suffix
+     *
+     * @return string
+     */
     public static function generateName($ext, $suffix = null)
     {
         if (!$suffix) {
             return time() . \Yii::$app->security->generateRandomString(5) . '.' . $ext;
         }
+
         return time() . \Yii::$app->security->generateRandomString(5) . '-' . $suffix . '.' . $ext;
     }
 
+    /**
+     * @param $path
+     * @param bool $check
+     *
+     * @return string
+     */
     public static function generateSubdir($path, $check = true)
     {
         if ($check && !is_dir($path)) {
-            mkdir($path, 0777, true);
+            self::mkdir($path, 0775, true);
         }
         $subdir = \Yii::$app->security->generateRandomString(2);
         //images with "ad" in path get blocked by adblocker
-        if ($subdir == "ad") {
-            $subdir = "/da";
+        if ($subdir === 'ad') {
+            $subdir = '/da';
         }
         if ($path && $check && !is_dir($path . '/' . $subdir)) {
-            mkdir($path . '/' . $subdir);
+            self::mkdir($path . '/' . $subdir . 0775, true);
         }
+
         return $subdir;
     }
 
@@ -59,6 +83,7 @@ class FileHelper extends BaseFileHelper
      * @param UploadedFile $file
      * @param string $path
      * @param bool $subdir
+     *
      * @return string
      * @throws \Exception
      */
@@ -71,9 +96,9 @@ class FileHelper extends BaseFileHelper
             $subdir = '';
             if (!is_dir($path)) {
                 if (!is_dir(dirname($path))) {
-                    mkdir(dirname($path));
+                    self::mkdir(dirname($path), 0775, true);
                 }
-                mkdir($path);
+                self::mkdir($path, 0775, true);
             }
         }
         $newName = static::generateName($file->extension);
@@ -82,6 +107,7 @@ class FileHelper extends BaseFileHelper
         if (!$saved) {
             throw new \Exception('Could not save uploaded file: ' . $file->error . ' to path ' . $path . '/' . $result);
         }
+
         return $result;
     }
 
@@ -89,6 +115,7 @@ class FileHelper extends BaseFileHelper
      * @param string $url
      * @param string $path
      * @param bool $subdir
+     *
      * @return string
      * @throws Exception
      */
@@ -101,9 +128,9 @@ class FileHelper extends BaseFileHelper
             $subdir = '';
             if (!is_dir($path)) {
                 if (!is_dir(dirname($path))) {
-                    mkdir(dirname($path));
+                    self::mkdir(dirname($path), 0775, true);
                 }
-                mkdir($path);
+                self::mkdir($path, 0775, true);
             }
         }
         $rawExt = pathinfo($url, PATHINFO_EXTENSION);
@@ -130,6 +157,14 @@ class FileHelper extends BaseFileHelper
         return $result;
     }
 
+    /**
+     * Get path to save file
+     *
+     * @param bool $abs
+     * @param null $name
+     *
+     * @return bool|string
+     */
     public static function getStoragePath($abs = false, $name = null)
     {
         if ($abs) {
@@ -144,6 +179,14 @@ class FileHelper extends BaseFileHelper
         }
     }
 
+    /**
+     * Get image sizes
+     *
+     * @param string $path
+     * @param bool $makeAbs
+     *
+     * @return array|null
+     */
     public static function getImageSize($path, $makeAbs = false)
     {
         $fullPath = $makeAbs ? (\Yii::getAlias('@webroot') . $path) : $path;
@@ -151,17 +194,23 @@ class FileHelper extends BaseFileHelper
             return null;
         } else {
             $size = getimagesize($fullPath);
+
             return [$size[0], $size[1]];
         }
     }
 
+    /**
+     * Remove file from directory
+     *
+     * @param string $dir
+     */
     public static function rmdirContent($dir)
     {
         if (!$dh = opendir($dir)) {
             return;
         }
         while (false !== ($obj = readdir($dh))) {
-            if ($obj == '.' || $obj == '..') {
+            if ($obj === '.' || $obj === '..') {
                 continue;
             }
             if (is_dir($dir . '/' . $obj)) {
@@ -171,5 +220,25 @@ class FileHelper extends BaseFileHelper
             }
         }
         closedir($dh);
+    }
+
+    /**
+     * Create directory
+     *
+     * @param string $pathname
+     * @param int $mode
+     * @param bool $recursive
+     * @param resource $context
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public static function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
+    {
+        if (!@mkdir($pathname, $mode, $recursive, $context) && !is_dir($pathname)) {
+            throw new Exception('Error on create directory ' . $pathname);
+        }
+
+        return true;
     }
 }

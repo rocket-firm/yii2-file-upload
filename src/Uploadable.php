@@ -7,6 +7,7 @@ use yii\web\UploadedFile;
 
 /**
  * Class Uploadable
+ *
  * @package rocketfirm\fileupload
  *
  * @property ActiveRecord $this
@@ -14,9 +15,12 @@ use yii\web\UploadedFile;
 trait Uploadable
 {
     /**
+     * Save file after upload and set attribute value
+     *
      * @param UploadedFile $file
      * @param $attribute
      * @param bool $removeOld
+     *
      * @return string
      */
     public function saveFile(UploadedFile $file, $attribute, $removeOld = true)
@@ -26,16 +30,20 @@ trait Uploadable
         }
         $newName = FileHelper::saveUploaded($file, $this->tableName());
         $this->$attribute = $newName;
+
         return $newName;
     }
 
     /**
+     * Get path to place where file was saved
+     *
      * @param string $attribute
      * @param bool $abs
-     * @param string $mode
-     * @return string filename or false if there's no image
+     * @param string $suffix
+     *
+     * @return string|bool string filename or false if there's no image
      */
-    public function getFilePath($attribute, $abs = false, $mode = null)
+    public function getFilePath($attribute, $abs = false, $suffix = null)
     {
         if (!$this->$attribute) {
             return false;
@@ -43,12 +51,19 @@ trait Uploadable
         $path = $this->getStorageDir($abs) . '/';
 
         $pathinfo = pathinfo($this->$attribute);
-        return $path . $pathinfo['dirname'] . "/" . $pathinfo['filename'] . $mode . "." . $pathinfo['extension'];
+
+        return $path . $pathinfo['dirname'] . '/' . $pathinfo['filename'] . $suffix . '.' . $pathinfo['extension'];
     }
 
-    public function deleteFile($attribute, $mode = null)
+    /**
+     * @param $attribute
+     * @param null $suffix
+     *
+     * @return void
+     */
+    public function deleteFile($attribute, $suffix = null)
     {
-        $path = $this->getFilePath($attribute, true, $mode);
+        $path = $this->getFilePath($attribute, true, $suffix);
         if ($path && file_exists($path)) {
             unlink($path);
         }
@@ -56,6 +71,7 @@ trait Uploadable
 
     /**
      * @param bool $abs
+     *
      * @return string path
      */
     public function getStorageDir($abs = false)

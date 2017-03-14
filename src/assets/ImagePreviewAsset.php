@@ -1,7 +1,6 @@
 <?php
 namespace rocketfirm\fileupload\assets;
 
-
 use yii\web\AssetBundle;
 
 /**

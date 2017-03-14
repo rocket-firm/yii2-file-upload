@@ -1,23 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: naffiq
- * Date: 2/22/17
- * Time: 12:07 PM
- */
-
 namespace rocketfirm\fileupload;
 
-
-use app\components\interfaces\UploadableInterface;
-use rocketfirm\engine\ActiveRecord;
 use yii\base\Behavior;
 use yii\base\Model;
+use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
 /**
  * Class UploadableBehavior
- * @package app\components\behaviors
+ *
+ * @package rocketfirm\fileupload
  */
 class UploadableBehavior extends Behavior
 {
@@ -48,7 +40,8 @@ class UploadableBehavior extends Behavior
     public function initUploadedFiles()
     {
         foreach ($this->fields as $fileField => $dbField) {
-            $this->owner->$fileField = UploadedFile::getInstance($this->owner, $fileField) ?? UploadedFile::getInstanceByName($fileField);
+            $this->owner->$fileField = UploadedFile::getInstance($this->owner,
+                $fileField) ?: UploadedFile::getInstanceByName($fileField);
 
             if (!empty($this->owner->$fileField)) {
                 $this->owner->$dbField = $this->owner->saveFile($this->owner->$fileField, $dbField);
