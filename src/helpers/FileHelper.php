@@ -1,4 +1,5 @@
 <?php
+
 namespace rocketfirm\fileupload\helpers;
 
 use yii\base\Exception;
@@ -65,15 +66,15 @@ class FileHelper extends BaseFileHelper
     public static function generateSubdir($path, $check = true)
     {
         if ($check && !is_dir($path)) {
-            self::mkdir($path, 0775, true);
+            self::mkdir($path, 0777, true);
         }
         $subdir = \Yii::$app->security->generateRandomString(2);
         //images with "ad" in path get blocked by adblocker
         if ($subdir === 'ad') {
-            $subdir = '/da';
+            $subdir = 'da';
         }
         if ($path && $check && !is_dir($path . '/' . $subdir)) {
-            self::mkdir($path . '/' . $subdir . 0775, true);
+            self::mkdir($path . '/' . $subdir, 0777, true);
         }
 
         return $subdir;
@@ -87,7 +88,7 @@ class FileHelper extends BaseFileHelper
      * @return string
      * @throws \Exception
      */
-    public static function saveUploaded($file, $path, $subdir = true)
+    public static function saveUploaded(UploadedFile $file, $path, $subdir = true)
     {
         $path = static::getStoragePath(true, $path);
         if ($subdir) {
@@ -143,7 +144,7 @@ class FileHelper extends BaseFileHelper
 
         $result = $subdir ? $subdir . '/' . $newName : $newName;
 
-        $content = @file_get_contents($url);
+        $content = file_get_contents($url);
         if ($content === false) {
             throw new Exception('Could not load file from url: ' . $url);
         }
@@ -228,14 +229,14 @@ class FileHelper extends BaseFileHelper
      * @param string $pathname
      * @param int $mode
      * @param bool $recursive
-     * @param resource $context
+     * @param resource|null $context
      *
      * @return bool
      * @throws Exception
      */
-    public static function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
+    public static function mkdir($pathname, $mode = 0777, $recursive = false)
     {
-        if (!@mkdir($pathname, $mode, $recursive, $context) && !is_dir($pathname)) {
+        if (!mkdir($pathname, $mode, $recursive) && !is_dir($pathname)) {
             throw new Exception('Error on create directory ' . $pathname);
         }
 

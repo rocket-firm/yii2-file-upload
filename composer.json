@@ -1,25 +1,33 @@
 {
-    "name": "rocketfirm/yii2-file-upload",
-    "description": "File uploading in Yii2 has never been easier! Edit",
-    "type": "library",
-    "require": {
-        "yiisoft/yii2": "^2.0.0"
+  "name": "rocketfirm/yii2-file-upload",
+  "description": "File uploading in Yii2 has never been easier! Edit",
+  "type": "library",
+  "require": {
+    "yiisoft/yii2": "^2.0.0"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2",
+    "codeception/specify": "*",
+    "codeception/verify": "*"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "naffiq",
+      "email": "abdu.galymzhan@gmail.com"
     },
-    "require-dev": {
-      "codeception/codeception": "^2.2",
-      "codeception/specify": "*",
-      "codeception/verify": "*"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "naffiq",
-            "email": "abdu.galymzhan@gmail.com"
-        },
-      {
-        "name": "Yevgeniy Dymov",
-        "email": "johnluxor@hotmail.com"
-        }
-    ],
-    "minimum-stability": "stable"
+    {
+      "name": "Yevgeniy Dymov",
+      "email": "johnluxor@hotmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "rocketfirm\\fileupload\\": "src",
+      "rocketfirm\\fileupload\\assets\\": "src\\assets",
+      "rocketfirm\\fileupload\\helpers\\": "src\\helpers",
+      "rocketfirm\\fileupload\\widgets\\": "src\\widgets"
+    }
+  }
 }

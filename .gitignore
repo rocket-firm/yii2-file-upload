@@ -7,3 +7,4 @@ themes/classic/views/
 
 .idea
 vendor
+tests/_output/*

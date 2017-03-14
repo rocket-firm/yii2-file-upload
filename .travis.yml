@@ -1,0 +1,11 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+install:
+  - composer install
+
+script:
+  - mkdir /home/travis/build/rocket-firm/yii2-file-upload/tests/tmp
+  - /home/travis/build/rocket-firm/yii2-file-upload/vendor/bin/codecept run
