@@ -5,8 +5,7 @@ php:
   - '7.1'
 install:
   - composer install
-  - composer global require "codeception/codeception:*"
-  - alias codecept='/home/travis/.composer/vendor/bin/codecept'
 
 script:
-  - /home/travis/.composer/vendor/bin/codecept run
+  - mkdir /home/travis/build/rocket-firm/yii2-file-upload/tests/tmp
+  - /home/travis/build/rocket-firm/yii2-file-upload/vendor/bin/ run
