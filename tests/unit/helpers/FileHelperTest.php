@@ -92,23 +92,25 @@ class FileHelperTest extends Unit
 
     public function testSaveUploaded()
     {
-        $this->markTestIncomplete();
-        $uploadedFile = new UploadedFile;
-        $uploadedFile->error = UPLOAD_ERR_OK;
-        $uploadedFile->name = "image.png";
-        $uploadedFile->tempName = \Yii::getAlias('@tests') . '/_data/image.png';
-        $uploadedFile->type = "image/png";
-        $uploadedFile->size = 4096;
 
+        $uploadedFile = $this->getMockBuilder('yii\web\UploadedFile')->getMock();
+        $uploadedFile->expects($this->any())->method('saveAs')->willReturn($this->returnValue(true));
+
+        /**
+         * @var UploadedFile $uploadedFile
+         */
         $this->specify('SaveFile on upload', function () use ($uploadedFile) {
-            $this->assertFileExists('tests/tmp/' .
+            $time = time();
+            $this->assertEquals($time . 'temppath.',
                 FileHelper::saveUploaded($uploadedFile, 'tmp', false)
             );
         });
 
-        $this->specify('SaveFile on upload with subdir', function () use ($uploadedFile) {
-            $this->assertFileExists('tests/tmp/' . FileHelper::saveUploaded($uploadedFile,
-                    'tmp', true));
+        $this->specify('SaveFile on upload', function () use ($uploadedFile) {
+            $time = time();
+            $this->assertEquals('temppath/' . $time . 'temppath.',
+                FileHelper::saveUploaded($uploadedFile, 'tmp', true)
+            );
         });
     }
 
